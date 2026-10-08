@@ -1,0 +1,24 @@
+services:
+
+  web:
+    build: .
+    container_name: expense-tracker-web
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: expense-tracker-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: expense_tracker
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/database.sql:/docker-entrypoint-initdb.d/database.sql:ro
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
